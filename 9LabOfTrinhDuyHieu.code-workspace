@@ -1,0 +1,34 @@
+﻿{
+    "settings":  {
+                     "dart.openDevTools":  "never"
+                 },
+    "folders":  [
+                    {
+                        "path":  "bmi_calculator"
+                    },
+                    {
+                        "path":  "boss_level_challenge2"
+                    },
+                    {
+                        "path":  "clima"
+                    },
+                    {
+                        "path":  "dicee_app"
+                    },
+                    {
+                        "path":  "im_rich"
+                    },
+                    {
+                        "path":  "magic_8_ball"
+                    },
+                    {
+                        "path":  "micard"
+                    },
+                    {
+                        "path":  "quizzler"
+                    },
+                    {
+                        "path":  "xylophone"
+                    }
+                ]
+}
