@@ -11,17 +11,19 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(MaterialApp(
-        theme: labTheme(),
-        home: const LocationScreen(locationWeather: {
-          'name': 'Da Nang',
-          'main': {'temp': 28},
-          'weather': [
-            {'id': 800}
-          ]
-        })));
+      theme: labTheme(),
+      home: const LocationScreen(locationWeather: {
+        'name': 'Da Nang, Da Nang, Vietnam',
+        'main': {'temp': 28},
+        'weather': [
+          {'id': 0}
+        ]
+      }),
+    ));
     await tester.pumpAndSettle();
     expect(find.text('28°'), findsOneWidget);
-    expect(find.text('Da Nang'), findsOneWidget);
+    expect(find.text('Da Nang, Da Nang, Vietnam'), findsOneWidget);
+    expect(find.text('Thời tiết khá ấm áp'), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.ensureVisible(find.text('Tìm thành phố'));
     await tester.tap(find.text('Tìm thành phố'));

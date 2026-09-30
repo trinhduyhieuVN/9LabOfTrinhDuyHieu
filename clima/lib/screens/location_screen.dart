@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+
 import '../lab_ui.dart';
+import '../services/networking.dart';
 import '../services/weather.dart';
 import 'city_screen.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen({super.key, this.locationWeather});
+
   final dynamic locationWeather;
+
   @override
   State<LocationScreen> createState() => _LocationScreenState();
 }
@@ -15,6 +19,7 @@ class _LocationScreenState extends State<LocationScreen> {
   dynamic data;
   bool busy = false;
   String? error;
+
   @override
   void initState() {
     super.initState();
@@ -28,24 +33,19 @@ class _LocationScreenState extends State<LocationScreen> {
       error = null;
     });
     try {
-      final result = await (city == null
-          ? weather.getLocationWeather()
-          : weather.getCityWeather(city));
+      final result = city == null
+          ? await weather.getLocationWeather()
+          : await weather.getCityWeather(city);
       if (!mounted) return;
-      if (result == null || result['main'] == null) {
-        setState(
-          () => error =
-              'Chưa lấy được thời tiết. Hãy thử tên thành phố khác hoặc thử lại.',
-        );
-      } else {
-        setState(() => data = result);
-      }
+      setState(() => data = result);
+    } on WeatherException catch (exception) {
+      if (!mounted) return;
+      setState(() => error = exception.message);
     } catch (_) {
       if (!mounted) return;
-      setState(
-        () => error =
-            'Không thể tải thời tiết. Kiểm tra kết nối hoặc tìm bằng tên thành phố.',
-      );
+      setState(() => error = city == null
+          ? 'Không lấy được vị trí. Hãy cho phép truy cập vị trí hoặc tìm thành phố.'
+          : 'Không tải được thời tiết. Hãy kiểm tra Internet và thử lại.');
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -123,6 +123,12 @@ class _LocationScreenState extends State<LocationScreen> {
                 ),
             ],
           ),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Nguồn dữ liệu thời tiết: Open-Meteo.com',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 12, color: Color(0xFF607080)),
         ),
         const SizedBox(height: 24),
         FilledButton.icon(
